@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AR Lab Informatika - Institut Asia</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    #infoBox2D {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #000;
+      padding: 16px;
+      border-radius: 12px;
+      max-width: 80%;
+      font-size: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 100;
+      text-align: center;
+    }
+
+    #toggleInfoBtn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 100;
+    }
+
+    #toggleInfoBtn:active {
+      transform: translateX(-50%) scale(0.97);
+    }
+
+    @media (max-width: 480px) {
+      #infoBox2D {
+        font-size: 16px;
+        padding: 18px;
+      }
+
+      #toggleInfoBtn {
+        font-size: 16px;
+        padding: 14px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Tombol HTML -->
+<button id="toggleInfoBtn">📜 Info Lab</button>
+
+<!-- Box Informasi 2D HTML -->
+<div id="infoBox2D">
+  <strong>Lab Komputer Jaringan</strong><br>
+  Dilengkapi router, switch, dan server.<br>
+  Digunakan untuk praktikum jaringan & server.
+</div>
+
+<a-scene embedded arjs>
+  <a-assets>
+    <a-asset-item id="maskotModel" src="assets/3d/maskot.glb"></a-asset-item>
+    <audio id="audioInfo" src="assets/audio-lab.mp3"></audio>
+  </a-assets>
+
+  <a-marker preset="hiro">
+    <!-- Maskot -->
+    <a-entity id="maskot"
+              gltf-model="#maskotModel"
+              position="0 0 0"
+              rotation="0 180 0"
+              scale="0.005 0.005 0.005">
+    </a-entity>
+  </a-marker>
+
+  <a-entity camera></a-entity>
+</a-scene>
+
+<!-- Script untuk interaksi HTML -->
+<script>
+  const infoBox2D = document.getElementById("infoBox2D");
+  const toggleBtn = document.getElementById("toggleInfoBtn");
+  const audio = document.getElementById("audioInfo");
+
+  toggleBtn.addEventListener("click", () => {
+    // Tampilkan atau sembunyikan info box
+    const visible = infoBox2D.style.display === "block";
+    infoBox2D.style.display = visible ? "none" : "block";
+
+    // Mainkan audio jika muncul
+    if (!visible && audio) {
+      audio.currentTime = 0;
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  });
+</script>
+
+</body>
+</html>
