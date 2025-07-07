@@ -5,6 +5,7 @@
   <title>AR Lab Informatika - Institut Asia</title>
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
   <style>
     body {
       margin: 0;
@@ -102,7 +103,7 @@
 
 <a-scene embedded arjs>
   <a-assets>
-    <a-asset-item id="maskotModel" src="assets/3d/maskot.glb"></a-asset-item>
+    <a-asset-item id="maskotModel" src="assets/3d/maskot_anmt.glb"></a-asset-item>
     <!-- Tidak perlu lagi audioInfo manual -->
   </a-assets>
 
@@ -111,7 +112,8 @@
               gltf-model="#maskotModel"
               position="0 0 0"
               rotation="0 0 0"
-              scale="0.005 0.005 0.005">
+              scale="0.5 0.5 0.5"
+              animation-mixer>
     </a-entity>
   </a-marker>
 

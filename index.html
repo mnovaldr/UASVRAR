@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>AR LAB INFORMATIKA - INSTITUT ASIA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Penting untuk mobile -->
   <style>
     body {
       margin: 0;
@@ -11,9 +12,8 @@
       background-size: cover;
     }
 
-    /* Lapisan gelap transparan */
     .overlay {
-      background-color: rgba(0, 0, 0, 0.5); /* transparan gelap */
+      background-color: rgba(0, 0, 0, 0.5);
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
@@ -35,6 +35,7 @@
       color: #ffffff;
       margin-bottom: 10px;
       text-shadow: 1px 1px 4px #000;
+      font-size: 1.8rem;
     }
 
     p {
@@ -42,6 +43,7 @@
       max-width: 400px;
       margin-bottom: 30px;
       text-shadow: 1px 1px 3px #000;
+      font-size: 1rem;
     }
 
     .btn {
@@ -56,24 +58,42 @@
       text-decoration: none;
       display: inline-block;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: background-color 0.3s;
     }
 
     .btn:hover {
       background-color: rgba(0, 95, 163, 0.95);
+    }
+
+    /* Media Query: untuk layar dengan lebar maksimal 600px */
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+        padding: 0 10px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+        margin: 8px;
+      }
+
+      .logo {
+        width: 80px;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="overlay">
-    <!-- Logo -->
     <img src="assets/img/LogoAsia.png" alt="Logo Institut Asia" class="logo">
-
-    <!-- Judul -->
     <h1>🧑‍💻 AR Lab Institut Asia</h1>
     <p>Jelajahi berbagai laboratorium di Institut Asia Malang melalui teknologi Augmented Reality!</p>
-
-    <!-- Tombol Navigasi -->
     <a class="btn" href="ar-lab-jaringan.html">🔌 Lab F Jaringan</a>
     <a class="btn" href="ar-lab-multimedia.html">🎨 Lab Multimedia</a>
     <a class="btn" href="ar-lab-datascience.html">📊 Lab Data Science</a>
