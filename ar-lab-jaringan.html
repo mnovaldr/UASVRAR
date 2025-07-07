@@ -48,6 +48,26 @@
       transform: translateX(-50%) scale(0.97);
     }
 
+    #homeBtn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    text-decoration: none;
+    background-color: rgba(0, 119, 204, 0.8);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 50%;
+    z-index: 101;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease;
+    }
+
+    #homeBtn:hover {
+      background-color: rgba(0, 119, 204, 1);
+    }
+
+
     @media (max-width: 480px) {
       #infoBox2D {
         font-size: 16px;
@@ -58,17 +78,24 @@
         font-size: 16px;
         padding: 14px 22px;
       }
+
+      #homeBtn {
+      font-size: 20px;
+      padding: 8px 10px;
+      }
     }
   </style>
 </head>
 <body>
 
+<!-- Tombol Home -->
+<a href="index.html" id="homeBtn" title="Kembali ke Beranda">🏠</a>
 <!-- Tombol HTML -->
 <button id="toggleInfoBtn">📜 Info Lab</button>
 
 <!-- Box Informasi 2D HTML -->
 <div id="infoBox2D">
-  <strong>Lab Komputer Jaringan</strong><br>
+  <strong>Lab F (Komputer Jaringan)</strong><br>
   Dilengkapi router, switch, dan server.<br>
   Digunakan untuk praktikum jaringan & server.
 </div>
@@ -76,11 +103,10 @@
 <a-scene embedded arjs>
   <a-assets>
     <a-asset-item id="maskotModel" src="assets/3d/maskot.glb"></a-asset-item>
-    <audio id="audioInfo" src="assets/audio-lab.mp3"></audio>
+    <!-- Tidak perlu lagi audioInfo manual -->
   </a-assets>
 
   <a-marker preset="hiro">
-    <!-- Maskot -->
     <a-entity id="maskot"
               gltf-model="#maskotModel"
               position="0 0 0"
@@ -92,23 +118,35 @@
   <a-entity camera></a-entity>
 </a-scene>
 
-<!-- Script untuk interaksi HTML -->
+<!-- Script untuk interaksi dan suara -->
 <script>
   const infoBox2D = document.getElementById("infoBox2D");
   const toggleBtn = document.getElementById("toggleInfoBtn");
-  const audio = document.getElementById("audioInfo");
+
+  // Fungsi untuk membacakan teks
+  function speakText(text) {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+
+    synth.cancel(); // Hentikan suara sebelumnya jika ada
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'id-ID'; // Bahasa Indonesia
+    utter.pitch = 1;
+    utter.rate = 1;
+    utter.volume = 1;
+    synth.speak(utter);
+  }
 
   toggleBtn.addEventListener("click", () => {
-    // Tampilkan atau sembunyikan info box
     const visible = infoBox2D.style.display === "block";
     infoBox2D.style.display = visible ? "none" : "block";
 
-    // Mainkan audio jika muncul
-    if (!visible && audio) {
-      audio.currentTime = 0;
-      audio.play();
+    if (!visible) {
+      const textToRead = "Lab F Komputer Jaringan. Dilengkapi router, switch, dan server. Digunakan untuk praktikum jaringan dan server.";
+      speakText(textToRead);
     } else {
-      audio.pause();
+      window.speechSynthesis.cancel(); // Stop speech saat ditutup
     }
   });
 </script>
