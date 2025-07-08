@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AR Lab Informatika - Institut Asia</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    #specBox, #scheduleBox {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255,255,255,0.95);
+      color: #000;
+      padding: 16px;
+      border-radius: 12px;
+      max-width: 90%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 200;
+      font-size: 14px;
+      display: none;
+    }
+
+    #specBox { bottom: 100px; }
+
+    #scheduleBox {
+      top: 10%;
+      max-height: 75%;
+      overflow-y: auto;
+    }
+
+    #uptBox {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(255,255,255,0.95);
+      color: #000;
+      padding: 16px;
+      border-radius: 12px;
+      max-width: 90%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      z-index: 200;
+      font-size: 14px;
+      top: 20%;
+      display: none;
+    }
+
+    .action-button {
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button-container {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      z-index: 100;
+      flex-wrap: wrap;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+
+    #homeBtn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      text-decoration: none;
+      background-color: rgba(0, 119, 204, 0.8);
+      color: white;
+      padding: 10px 12px;
+      border-radius: 50%;
+      z-index: 101;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    #homeBtn:hover {
+      background-color: rgba(0, 119, 204, 1);
+    }
+
+    @media (max-width: 480px) {
+      #specBox, #scheduleBox, #uptBox {
+        font-size: 16px;
+        padding: 20px;
+      }
+
+      .button-container {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        z-index: 100;
+        padding: 0 10px;
+        box-sizing: border-box;
+        width: auto;
+      }
+
+      .action-button {
+        background-color: #0077cc;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        font-size: 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        width: 100%;
+        max-width: 280px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      #homeBtn {
+        font-size: 20px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Tombol Navigasi -->
+<a href="index.html" id="homeBtn" title="Kembali ke Beranda">🏠</a>
+
+<!-- Tombol Aksi -->
+<div class="button-container">
+  <button class="action-button" id="specBtn">🖥️ Spesifikasi Lab</button>
+  <button class="action-button" id="scheduleBtn">📅 Jadwal Lab</button>
+  <button class="action-button" id="uptBtn">📞 Call Center</button>
+</div>
+
+<div id="uptBox">
+  <strong>Informasi Petugas UPT</strong><br><br>
+  Nomor UPT: <strong>0341-123456</strong><br><br>
+  Silakan datangi petugas UPT yang bertugas di area lab untuk mendapatkan bantuan teknis atau informasi lebih lanjut.<br><br>
+  <button onclick="closeUptBox()" style="margin-top:10px; padding:6px 12px;">❌ Tutup</button>
+</div>
+
+<!-- Box Spesifikasi Lab -->
+<div id="specBox">
+  <strong>Spesifikasi Lab C</strong><br><br>
+  - Prosesor: Intel Core i5 Generasi ke-10<br>
+  - RAM: 16 GB<br>
+  - Kartu Grafis: NVIDIA RTX 1650<br>
+  - Monitor: Resolusi 1920×1080 (IPS)<br><br>
+  Lab ini sangat cocok untuk tugas desain grafis, animasi, dan pekerjaan multimedia lainnya karena performa tinggi perangkat kerasnya.
+
+  <br><br>
+  <button onclick="closeSpecBox()" style="margin-top:10px; padding:6px 12px;">❌ Tutup</button>
+</div>
+
+<!-- Jadwal Lab -->
+<div id="scheduleBox">
+  <strong>Jadwal Penggunaan Lab C</strong><br>
+  Kapasitas: 30 Orang | Lokasi: Gedung 1<br><br>
+
+  <strong>Senin</strong><br>
+  08.00–10.00: TI – Pemrograman<br>
+  10.00–12.00: DKV – Adobe<br>
+  13.00–15.00: TI – Basis Data<br>
+  15.00–17.00: DKV – Project Desain<br><br>
+
+  <strong>Selasa</strong><br>
+  08.00–10.00: DKV – Figma/UI<br>
+  10.00–12.00: TI – Jaringan<br>
+  13.00–15.00: DKV – Animasi<br>
+  15.00–17.00: TI – AI<br><br>
+
+  <strong>Rabu</strong><br>
+  08.00–10.00: TI – Web Dev<br>
+  10.00–12.00: DKV – Video Editing<br>
+  13.00–15.00: TI – Mobile App<br>
+  15.00–17.00: DKV – Multimedia<br><br>
+
+  <strong>Kamis</strong><br>
+  08.00–10.00: DKV – Desain Grafis<br>
+  10.00–12.00: TI – Data Science<br>
+  13.00–15.00: DKV – 3D Modeling<br>
+  15.00–17.00: TI – Game Dev<br><br>
+
+  <strong>Jumat</strong><br>
+  08.00–10.00: TI – Keamanan Cyber<br>
+  10.00–12.00: DKV – Branding<br>
+  13.00–15.00: Open Lab<br>
+  15.00–17.00: Maintenance<br><br>
+
+  <button onclick="closeScheduleBox()" style="margin-top:10px; padding:6px 12px;">❌ Tutup</button>
+</div>
+
+<a-scene embedded arjs>
+  <a-assets>
+    <audio id="welcomeAudio" src="assets/sound/WelcomeSound.mp3" preload="auto"></audio>
+    <audio id="scheduleAudio" src="assets/sound/JadwalSound.mp3" preload="auto"></audio>
+    <audio id="specAudio" src="assets/sound/SpesifikasiSound.mp3" preload="auto"></audio>
+    <audio id="uptAudio" src="assets/sound/UPTSound.mp3" preload="auto"></audio>
+    <a-asset-item id="maskotModel" src="assets/3d/maskot_anmt.glb"></a-asset-item>
+  </a-assets>
+
+  <!-- Marker -->
+  <a-marker type="pattern" url="assets/marker/pattern-a.patt">
+    <a-entity id="maskot"
+              gltf-model="#maskotModel"
+              position="0 0 0"
+              rotation="0 0 0"
+              scale="0.5 0.5 0.5"
+              animation-mixer>
+    </a-entity>
+
+    <!-- Teks -->
+    <a-text id="welcomeText"
+            value="Selamat datang di Lab A!"
+            position="0 1.2 0"
+            align="center"
+            color="#FFFF00"
+            width="4"
+            visible="false"
+            side="double"
+            font="mozillavr">
+    </a-text>
+  </a-marker>
+
+  <a-entity camera></a-entity>
+</a-scene>
+
+<!-- Script -->
+<script>
+  const specBox = document.getElementById("specBox");
+  const scheduleBox = document.getElementById("scheduleBox");
+  const specBtn = document.getElementById("specBtn");
+  const scheduleBtn = document.getElementById("scheduleBtn");
+  const uptBtn = document.getElementById("uptBtn");
+  const uptBox = document.getElementById("uptBox");
+
+  const specAudio = document.getElementById("specAudio");
+  const scheduleAudio = document.getElementById("scheduleAudio");
+  const uptAudio = document.getElementById("uptAudio");
+  const welcomeAudio = document.getElementById("welcomeAudio");
+
+  const welcomeText = document.getElementById("welcomeText");
+  const marker = document.querySelector("a-marker");
+
+  let hasPlayedWelcome = false;
+
+  // Fungsi untuk mengaktifkan audio context (diperlukan untuk autoplay)
+  function initializeAudioContext() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioContext.state === 'suspended') {
+      audioContext.resume();
+    }
+    return audioContext;
+  }
+
+  // Fungsi text-to-speech sebagai fallback
+  function speakText(text) {
+    const synth = window.speechSynthesis;
+    if (!synth) return;
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'id-ID';
+    utter.pitch = 1;
+    utter.rate = 1;
+    utter.volume = 1;
+    synth.speak(utter);
+  }
+
+  // Fungsi untuk memutar audio dengan fallback
+  function playAudioWithFallback(audioElement, fallbackText) {
+    if (audioElement) {
+      audioElement.play().catch(error => {
+        console.log('Audio play failed, using text-to-speech:', error);
+        speakText(fallbackText);
+      });
+    } else {
+      speakText(fallbackText);
+    }
+  }
+
+  // Event listeners untuk tombol
+  specBtn.addEventListener("click", () => {
+    specBox.style.display = "block";
+    playAudioWithFallback(specAudio, "Spesifikasi lab ini menggunakan prosesor Intel Core i5 generasi kesepuluh, RAM enam belas gigabyte, kartu grafis NVIDIA RTX 1650, dan layar IPS beresolusi Full HD.");
+  });
+
+  scheduleBtn.addEventListener("click", () => {
+    scheduleBox.style.display = "block";
+    playAudioWithFallback(scheduleAudio, "Berikut adalah jadwal penggunaan lab untuk setiap hari Senin hingga Jumat.");
+  });
+
+  uptBtn.addEventListener("click", () => {
+    uptBox.style.display = "block";
+    playAudioWithFallback(uptAudio, "Silakan datangi petugas UPT yang bertugas di area lab untuk mendapatkan bantuan teknis.");
+  });
+
+  // Fungsi untuk menutup box
+  function closeUptBox() {
+    uptBox.style.display = "none";
+    if (uptAudio) {
+      uptAudio.pause();
+      uptAudio.currentTime = 0;
+    }
+  }
+
+  function closeScheduleBox() {
+    scheduleBox.style.display = "none";
+    if (scheduleAudio) {
+      scheduleAudio.pause();
+      scheduleAudio.currentTime = 0;
+    }
+  }
+
+  function closeSpecBox() {
+    specBox.style.display = "none";
+    if (specAudio) {
+      specAudio.pause();
+      specAudio.currentTime = 0;
+    }
+  }
+
+  // Event listener untuk marker detection
+  marker.addEventListener("markerFound", () => {
+    console.log("Marker found!");
+    if (!hasPlayedWelcome) {
+      // Inisialisasi audio context
+      initializeAudioContext();
+      
+      // Tampilkan teks welcome
+      welcomeText.setAttribute("visible", true);
+      
+      // Putar audio welcome dengan fallback
+      playAudioWithFallback(welcomeAudio, "Selamat datang di Lab A Institut Asia!");
+      
+      hasPlayedWelcome = true;
+      console.log("Welcome audio played and text shown");
+    }
+  });
+
+  marker.addEventListener("markerLost", () => {
+    console.log("Marker lost!");
+    welcomeText.setAttribute("visible", false);
+    
+    // Stop welcome audio jika masih playing
+    if (welcomeAudio) {
+      welcomeAudio.pause();
+      welcomeAudio.currentTime = 0;
+    }
+    
+    // Reset flag setelah delay untuk mencegah spam
+    setTimeout(() => {
+      hasPlayedWelcome = false;
+    }, 1000);
+  });
+
+  // Event listener untuk user interaction (untuk mengaktifkan audio context)
+  document.addEventListener('click', initializeAudioContext, { once: true });
+  document.addEventListener('touchstart', initializeAudioContext, { once: true });
+
+  // Preload audio files
+  window.addEventListener('load', () => {
+    const audioElements = [welcomeAudio, specAudio, scheduleAudio, uptAudio];
+    audioElements.forEach(audio => {
+      if (audio) {
+        audio.load();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
