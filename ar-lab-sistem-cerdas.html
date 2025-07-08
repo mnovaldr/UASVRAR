@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>AR Lab Informatika - Institut Asia</title>
+  <title>AR Lab Sistem Cerdas - Institut Asia</title>
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
@@ -156,7 +156,7 @@
 
 <!-- Box Spesifikasi Lab -->
 <div id="specBox">
-  <strong>Spesifikasi Lab B</strong><br><br>
+  <strong>Spesifikasi Lab Sistem Cerdas</strong><br><br>
   - Prosesor: Intel Core i5 Generasi ke-10<br>
   - RAM: 16 GB<br>
   - Kartu Grafis: NVIDIA RTX 1650<br>
@@ -169,7 +169,7 @@
 
 <!-- Jadwal Lab -->
 <div id="scheduleBox">
-  <strong>Jadwal Penggunaan Lab B</strong><br>
+  <strong>Jadwal Penggunaan Lab Sistem Cerdas</strong><br>
   Kapasitas: 30 Orang | Lokasi: Gedung 1<br><br>
 
   <strong>Senin</strong><br>
@@ -215,7 +215,7 @@
   </a-assets>
 
   <!-- Marker -->
-  <a-marker type="pattern" url="assets/marker/pattern-b.patt">
+  <a-marker preset="custom" type="pattern" url="assets/marker/pattern-sistem-cerdas.patt" id="marker">
     <a-entity id="maskot"
               gltf-model="#maskotModel"
               position="0 0 0"
@@ -226,7 +226,7 @@
 
     <!-- Teks -->
     <a-text id="welcomeText"
-            value="Selamat datang di Lab B!"
+            value="Selamat datang di Lab Sistem Cerdas!"
             position="0 1.2 0"
             align="center"
             color="#FFFF00"
@@ -345,7 +345,7 @@
       welcomeText.setAttribute("visible", true);
       
       // Putar audio welcome dengan fallback
-      playAudioWithFallback(welcomeAudio, "Selamat datang di Lab B Institut Asia!");
+      playAudioWithFallback(welcomeAudio, "Selamat datang di Lab A Institut Asia!");
       
       hasPlayedWelcome = true;
       console.log("Welcome audio played and text shown");
