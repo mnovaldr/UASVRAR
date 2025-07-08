@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AR Lab Game - Institut Asia</title>
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
@@ -10,207 +11,316 @@
     body {
       margin: 0;
       overflow: hidden;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    #specBox, #scheduleBox {
-      position: absolute;
+    /* Info Box Styles */
+    .info-box {
+      position: fixed;
       left: 50%;
       transform: translateX(-50%);
-      background-color: rgba(255,255,255,0.95);
-      color: #000;
-      padding: 16px;
+      background-color: rgba(255, 255, 255, 0.95);
+      color: #333;
+      padding: 20px;
       border-radius: 12px;
       max-width: 90%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      z-index: 200;
-      font-size: 14px;
+      width: 400px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
       display: none;
+      animation: fadeIn 0.3s ease-out;
     }
 
-    #specBox { bottom: 100px; }
+    #specBox {
+      top: 15%;
+    }
 
     #scheduleBox {
       top: 10%;
-      max-height: 75%;
+      max-height: 75vh;
       overflow-y: auto;
     }
 
     #uptBox {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(255,255,255,0.95);
-      color: #000;
-      padding: 16px;
-      border-radius: 12px;
-      max-width: 90%;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      z-index: 200;
-      font-size: 14px;
       top: 20%;
-      display: none;
+    }
+
+    .info-box h2 {
+      color: #0077cc;
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      border-bottom: 2px solid #0077cc;
+      padding-bottom: 8px;
+    }
+
+    .info-box p {
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .info-box ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .info-box li {
+      margin-bottom: 8px;
+    }
+
+    .close-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: bold;
+      display: block;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    .close-btn:hover {
+      background-color: #c0392b;
+    }
+
+    /* Button Container */
+    .button-container {
+      position: fixed;
+      bottom: 25px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      z-index: 100;
+      flex-wrap: wrap;
+      padding: 0 15px;
+      box-sizing: border-box;
     }
 
     .action-button {
       background-color: #0077cc;
       color: white;
       border: none;
-      padding: 10px 16px;
-      font-size: 14px;
+      padding: 12px 20px;
+      font-size: 15px;
       border-radius: 8px;
       cursor: pointer;
-    }
-
-    .button-container {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.2s;
+      min-width: 140px;
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 12px;
-      z-index: 100;
-      flex-wrap: wrap;
-      padding: 0 10px;
-      box-sizing: border-box;
+      gap: 8px;
     }
 
+    .action-button:hover {
+      background-color: #005fa3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .action-button:active {
+      transform: translateY(0);
+    }
+
+    /* Home Button */
     #homeBtn {
-      position: absolute;
+      position: fixed;
       top: 20px;
       left: 20px;
       font-size: 24px;
       text-decoration: none;
-      background-color: rgba(0, 119, 204, 0.8);
+      background-color: rgba(0, 119, 204, 0.9);
       color: white;
-      padding: 10px 12px;
+      padding: 12px;
       border-radius: 50%;
       z-index: 101;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #homeBtn:hover {
       background-color: rgba(0, 119, 204, 1);
+      transform: scale(1.1);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -10px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .info-box {
+        width: 90%;
+        padding: 15px;
+      }
+      
+      .button-container {
+        bottom: 15px;
+        gap: 10px;
+      }
+      
+      .action-button {
+        padding: 10px 15px;
+        font-size: 14px;
+        min-width: 120px;
+      }
+      
+      #homeBtn {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+      }
     }
 
     @media (max-width: 480px) {
-      #specBox, #scheduleBox, #uptBox {
-        font-size: 16px;
-        padding: 20px;
+      .info-box {
+        width: 95%;
+        padding: 12px;
       }
-
+      
       .button-container {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 12px;
-        z-index: 100;
-        padding: 0 10px;
-        box-sizing: border-box;
-        width: auto;
+        bottom: 10px;
       }
-
+      
       .action-button {
-        background-color: #0077cc;
-        color: white;
-        border: none;
-        padding: 10px 16px;
-        font-size: 14px;
-        border-radius: 8px;
-        cursor: pointer;
-        width: 100%;
+        width: 90%;
         max-width: 280px;
-        box-sizing: border-box;
-        text-align: center;
       }
-
-      #homeBtn {
-        font-size: 20px;
-        padding: 8px 10px;
+      
+      #specBox {
+        top: 10%;
+      }
+      
+      #scheduleBox {
+        top: 5%;
+        max-height: 80vh;
       }
     }
   </style>
 </head>
 <body>
 
-<!-- Tombol Navigasi -->
+<!-- Navigation Button -->
 <a href="index.html" id="homeBtn" title="Kembali ke Beranda">🏠</a>
 
-<!-- Tombol Aksi -->
+<!-- Action Buttons -->
 <div class="button-container">
-  <button class="action-button" id="specBtn">🖥️ Spesifikasi Lab</button>
-  <button class="action-button" id="scheduleBtn">📅 Jadwal Lab</button>
-  <button class="action-button" id="uptBtn">📞 Call Center</button>
+  <button class="action-button" id="specBtn">
+    <span style="font-size:18px;">🖥️</span> Spesifikasi
+  </button>
+  <button class="action-button" id="scheduleBtn">
+    <span style="font-size:18px;">📅</span> Jadwal
+  </button>
+  <button class="action-button" id="uptBtn">
+    <span style="font-size:18px;">📞</span> UPT
+  </button>
 </div>
 
-<div id="uptBox">
-  <strong>Informasi Petugas UPT</strong><br><br>
-  Nomor UPT: <strong>0341-123456</strong><br><br>
-  Silakan datangi petugas UPT yang bertugas di area lab untuk mendapatkan bantuan teknis atau informasi lebih lanjut.<br><br>
-  <button onclick="closeUptBox()" style="margin-top:10px; padding:6px 12px;">❌ Tutup</button>
+<!-- UPT Information Box -->
+<div id="uptBox" class="info-box">
+  <h2>Informasi Petugas UPT</h2>
+  <p><strong>Nomor Telepon:</strong> 0341-123456</p>
+  <p><strong>Lokasi:</strong> Gedung Administrasi Lt. 1</p>
+  <p><strong>Jam Operasional:</strong> Senin-Jumat, 08.00-16.00</p>
+  <p>Silakan hubungi petugas UPT untuk bantuan teknis atau informasi lebih lanjut mengenai fasilitas lab.</p>
+  <button class="close-btn" onclick="closeInfoBox('uptBox')">Tutup</button>
 </div>
 
-<!-- Box Spesifikasi Lab -->
-<div id="specBox">
-  <strong>Spesifikasi Lab Game</strong><br><br>
-  - Prosesor: Intel Core i5 Generasi ke-10<br>
-  - RAM: 16 GB<br>
-  - Kartu Grafis: NVIDIA RTX 1650<br>
-  - Monitor: Resolusi 1920×1080 (IPS)<br><br>
-  Lab ini sangat cocok untuk tugas desain grafis, animasi, dan pekerjaan multimedia lainnya karena performa tinggi perangkat kerasnya.
-
-  <br><br>
-  <button onclick="closeSpecBox()" style="margin-top:10px; padding:6px 12px;">❌ Tutup</button>
+<!-- Lab Specification Box -->
+<div id="specBox" class="info-box">
+  <h2>Spesifikasi Lab Game</h2>
+  <p><strong>Spesifikasi Hardware:</strong></p>
+  <ul>
+    <li><strong>Prosesor:</strong> Intel Core i5-10400F (6 Core, 12 Thread)</li>
+    <li><strong>RAM:</strong> 16GB DDR4 2666MHz</li>
+    <li><strong>Kartu Grafis:</strong> NVIDIA RTX 1650 4GB GDDR6</li>
+    <li><strong>Storage:</strong> SSD 512GB + HDD 1TB</li>
+    <li><strong>Monitor:</strong> 24" IPS 1920×1080 (144Hz)</li>
+  </ul>
+  <p><strong>Software Utama:</strong></p>
+  <ul>
+    <li>Unity Game Engine</li>
+    <li>Unreal Engine</li>
+    <li>Blender 3D</li>
+    <li>Adobe Creative Suite</li>
+    <li>Visual Studio Code</li>
+  </ul>
+  <button class="close-btn" onclick="closeInfoBox('specBox')">Tutup</button>
 </div>
 
-<!-- Jadwal Lab -->
-<div id="scheduleBox">
-  <strong>Jadwal Penggunaan Lab Game</strong><br>
-  Kapasitas: 30 Orang | Lokasi: Gedung 1<br><br>
-
-  <strong>Senin</strong><br>
-  08.00–10.00: TI – Pemrograman<br>
-  10.00–12.00: DKV – Adobe<br>
-  13.00–15.00: TI – Basis Data<br>
-  15.00–17.00: DKV – Project Desain<br><br>
-
-  <strong>Selasa</strong><br>
-  08.00–10.00: DKV – Figma/UI<br>
-  10.00–12.00: TI – Jaringan<br>
-  13.00–15.00: DKV – Animasi<br>
-  15.00–17.00: TI – AI<br><br>
-
-  <strong>Rabu</strong><br>
-  08.00–10.00: TI – Web Dev<br>
-  10.00–12.00: DKV – Video Editing<br>
-  13.00–15.00: TI – Mobile App<br>
-  15.00–17.00: DKV – Multimedia<br><br>
-
-  <strong>Kamis</strong><br>
-  08.00–10.00: DKV – Desain Grafis<br>
-  10.00–12.00: TI – Data Science<br>
-  13.00–15.00: DKV – 3D Modeling<br>
-  15.00–17.00: TI – Game Dev<br><br>
-
-  <strong>Jumat</strong><br>
-  08.00–10.00: TI – Keamanan Cyber<br>
-  10.00–12.00: DKV – Branding<br>
-  13.00–15.00: Open Lab<br>
-  15.00–17.00: Maintenance<br><br>
-
-  <button onclick="closeScheduleBox()" style="margin-top:10px; padding:6px 12px;">❌ Tutup</button>
+<!-- Schedule Box -->
+<div id="scheduleBox" class="info-box">
+  <h2>Jadwal Lab Game</h2>
+  <p><strong>Kapasitas:</strong> 30 Orang | <strong>Lokasi:</strong> Gedung 1 Lt. 3</p>
+  
+  <h3>Senin</h3>
+  <ul>
+    <li>08.00–10.00: Game Programming Basics</li>
+    <li>10.00–12.00: 2D Game Design</li>
+    <li>13.00–15.00: Game Physics</li>
+    <li>15.00–17.00: Project Workshop</li>
+  </ul>
+  
+  <h3>Selasa</h3>
+  <ul>
+    <li>08.00–10.00: UI/UX for Games</li>
+    <li>10.00–12.00: Network Programming</li>
+    <li>13.00–15.00: 2D Animation</li>
+    <li>15.00–17.00: AI for Games</li>
+  </ul>
+  
+  <h3>Rabu</h3>
+  <ul>
+    <li>08.00–10.00: Web Game Development</li>
+    <li>10.00–12.00: Video Editing</li>
+    <li>13.00–15.00: Mobile Game Design</li>
+    <li>15.00–17.00: Sound Design</li>
+  </ul>
+  
+  <h3>Kamis</h3>
+  <ul>
+    <li>08.00–10.00: 3D Modeling</li>
+    <li>10.00–12.00: Data Visualization</li>
+    <li>13.00–15.00: 3D Animation</li>
+    <li>15.00–17.00: Game Development</li>
+  </ul>
+  
+  <h3>Jumat</h3>
+  <ul>
+    <li>08.00–10.00: Game Security</li>
+    <li>10.00–12.00: Game Testing</li>
+    <li>13.00–15.00: Open Lab (Mahasiswa)</li>
+    <li>15.00–17.00: Maintenance</li>
+  </ul>
+  
+  <button class="close-btn" onclick="closeInfoBox('scheduleBox')">Tutup</button>
 </div>
 
+<!-- AR Scene -->
 <a-scene embedded arjs>
   <a-assets>
+    <!-- Audio Assets -->
     <audio id="welcomeAudio" src="assets/sound/WelcomeSound.mp3" preload="auto"></audio>
-    <audio id="scheduleAudio" src="assets/sound/JadwalSound.mp3" preload="auto"></audio>
     <audio id="specAudio" src="assets/sound/SpesifikasiSound.mp3" preload="auto"></audio>
+    <audio id="scheduleAudio" src="assets/sound/JadwalSound.mp3" preload="auto"></audio>
     <audio id="uptAudio" src="assets/sound/UPTSound.mp3" preload="auto"></audio>
+    
+    <!-- 3D Model -->
     <a-asset-item id="maskotModel" src="assets/3d/maskot_anmt.glb"></a-asset-item>
   </a-assets>
 
@@ -218,19 +328,20 @@
   <a-marker preset="custom" type="pattern" url="assets/marker/pattern-game.patt" id="marker">
     <a-entity id="maskot"
               gltf-model="#maskotModel"
-              position="0 0 0"
-              rotation="0 0 0"
+              position="0 0 0.2"
+              rotation="-90 0 0"
               scale="0.5 0.5 0.5"
               animation-mixer>
     </a-entity>
 
-    <!-- Teks -->
+    <!-- Welcome Text -->
     <a-text id="welcomeText"
-            value="Selamat datang di Lab Game!"
-            position="0 1.2 0"
+            value="Selamat datang di\nLab Game!"
+            position="0 1.5 0"
+            rotation="-90 0 0"
             align="center"
-            color="#FFFF00"
-            width="4"
+            color="#FFD700"
+            width="5"
             visible="false"
             side="double"
             font="mozillavr">
@@ -240,146 +351,236 @@
   <a-entity camera></a-entity>
 </a-scene>
 
-<!-- Script -->
 <script>
+  // DOM Elements
   const specBox = document.getElementById("specBox");
   const scheduleBox = document.getElementById("scheduleBox");
+  const uptBox = document.getElementById("uptBox");
   const specBtn = document.getElementById("specBtn");
   const scheduleBtn = document.getElementById("scheduleBtn");
   const uptBtn = document.getElementById("uptBtn");
-  const uptBox = document.getElementById("uptBox");
 
+  // Audio Elements
   const specAudio = document.getElementById("specAudio");
   const scheduleAudio = document.getElementById("scheduleAudio");
   const uptAudio = document.getElementById("uptAudio");
   const welcomeAudio = document.getElementById("welcomeAudio");
 
+  // AR Elements
   const welcomeText = document.getElementById("welcomeText");
   const marker = document.querySelector("a-marker");
 
+  // State Variables
   let hasPlayedWelcome = false;
+  let currentAudio = null;
+  let audioContextInitialized = false;
 
-  // Fungsi untuk mengaktifkan audio context (diperlukan untuk autoplay)
-  function initializeAudioContext() {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioContext.state === 'suspended') {
-      audioContext.resume();
-    }
-    return audioContext;
-  }
-
-  // Fungsi text-to-speech sebagai fallback
-  function speakText(text) {
-    const synth = window.speechSynthesis;
-    if (!synth) return;
-    synth.cancel();
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'id-ID';
-    utter.pitch = 1;
-    utter.rate = 1;
-    utter.volume = 1;
-    synth.speak(utter);
-  }
-
-  // Fungsi untuk memutar audio dengan fallback
-  function playAudioWithFallback(audioElement, fallbackText) {
-    if (audioElement) {
-      audioElement.play().catch(error => {
-        console.log('Audio play failed, using text-to-speech:', error);
-        speakText(fallbackText);
-      });
-    } else {
-      speakText(fallbackText);
+  // Initialize Audio Context
+  function initAudioContext() {
+    if (audioContextInitialized) return;
+    
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const context = new AudioContext();
+      
+      // Resume audio context on user interaction
+      document.body.addEventListener('click', () => {
+        if (context.state === 'suspended') {
+          context.resume();
+        }
+      }, { once: true });
+      
+      audioContextInitialized = true;
+      return context;
+    } catch (e) {
+      console.error("Audio Context Error:", e);
+      return null;
     }
   }
 
-  // Event listeners untuk tombol
+  // Text-to-Speech Function
+  function speak(text) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      
+      // Try to find Indonesian voice
+      const voices = window.speechSynthesis.getVoices();
+      const idVoice = voices.find(voice => voice.lang.includes('id')) || 
+                     voices.find(voice => voice.lang.includes('ID')) || 
+                     voices[0];
+      
+      if (idVoice) {
+        utterance.voice = idVoice;
+      }
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  // Play Audio with Fallback
+  function playAudio(audioElement, fallbackText) {
+    // Stop any currently playing audio
+    stopAllAudio();
+    
+    // Initialize audio context
+    initAudioContext();
+    
+    try {
+      if (audioElement) {
+        audioElement.currentTime = 0;
+        audioElement.play()
+          .then(() => {
+            currentAudio = audioElement;
+          })
+          .catch(error => {
+            console.log("Audio play failed, using TTS:", error);
+            speak(fallbackText);
+          });
+      } else {
+        speak(fallbackText);
+      }
+    } catch (e) {
+      console.error("Audio Error:", e);
+      speak(fallbackText);
+    }
+  }
+
+  // Stop All Audio
+  function stopAllAudio() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+      currentAudio = null;
+    }
+    window.speechSynthesis.cancel();
+  }
+
+  // Show Info Box
+  function showInfoBox(boxId) {
+    // Hide all boxes first
+    document.querySelectorAll('.info-box').forEach(box => {
+      box.style.display = 'none';
+    });
+    
+    // Show the selected box
+    const box = document.getElementById(boxId);
+    box.style.display = 'block';
+    
+    // Scroll to top if it's the schedule box
+    if (boxId === 'scheduleBox') {
+      box.scrollTop = 0;
+    }
+    
+    // Stop any audio when showing a box
+    stopAllAudio();
+  }
+
+  // Close Info Box
+  function closeInfoBox(boxId) {
+    document.getElementById(boxId).style.display = 'none';
+    stopAllAudio();
+  }
+
+  // Button Event Listeners
   specBtn.addEventListener("click", () => {
-    specBox.style.display = "block";
-    playAudioWithFallback(specAudio, "Spesifikasi lab ini menggunakan prosesor Intel Core i5 generasi kesepuluh, RAM enam belas gigabyte, kartu grafis NVIDIA RTX 1650, dan layar IPS beresolusi Full HD.");
+    showInfoBox("specBox");
+    const specText = "Spesifikasi Lab Game. " +
+      "Prosesor Intel Core i5 generasi kesepuluh dengan 6 core dan 12 thread. " +
+      "RAM 16GB DDR4. Kartu grafis NVIDIA RTX 1650 dengan memori 4GB. " +
+      "SSD 512GB dan HDD 1TB. Monitor 24 inci IPS dengan refresh rate 144Hz. " +
+      "Software utama termasuk Unity Game Engine, Unreal Engine, Blender 3D, dan Adobe Creative Suite.";
+    playAudio(specAudio, specText);
   });
 
   scheduleBtn.addEventListener("click", () => {
-    scheduleBox.style.display = "block";
-    playAudioWithFallback(scheduleAudio, "Berikut adalah jadwal penggunaan lab untuk setiap hari Senin hingga Jumat.");
+    showInfoBox("scheduleBox");
+    const scheduleText = "Jadwal Lab Game. " +
+      "Senin: Dasar Pemrograman Game jam 8 sampai 10, Desain Game 2D jam 10 sampai 12, " +
+      "Fisika untuk Game jam 1 sampai 3, Workshop Proyek jam 3 sampai 5. " +
+      "Selasa: Desain UI/UX untuk Game jam 8 sampai 10, Pemrograman Jaringan jam 10 sampai 12, " +
+      "Animasi 2D jam 1 sampai 3, Kecerdasan Buatan untuk Game jam 3 sampai 5. " +
+      "Rabu: Pengembangan Game Web jam 8 sampai 10, Penyuntingan Video jam 10 sampai 12, " +
+      "Desain Game Mobile jam 1 sampai 3, Desain Suara jam 3 sampai 5.";
+    playAudio(scheduleAudio, scheduleText);
   });
 
   uptBtn.addEventListener("click", () => {
-    uptBox.style.display = "block";
-    playAudioWithFallback(uptAudio, "Silakan datangi petugas UPT yang bertugas di area lab untuk mendapatkan bantuan teknis.");
+    showInfoBox("uptBox");
+    const uptText = "Informasi Unit Pelayanan Teknis. Nomor telepon 0341-123456. " +
+      "Lokasi di Gedung Administrasi lantai 1. Jam operasional Senin sampai Jumat " +
+      "pukul 8 pagi sampai 4 sore. Silakan hubungi petugas UPT untuk bantuan teknis.";
+    playAudio(uptAudio, uptText);
   });
 
-  // Fungsi untuk menutup box
-  function closeUptBox() {
-    uptBox.style.display = "none";
-    if (uptAudio) {
-      uptAudio.pause();
-      uptAudio.currentTime = 0;
-    }
-  }
-
-  function closeScheduleBox() {
-    scheduleBox.style.display = "none";
-    if (scheduleAudio) {
-      scheduleAudio.pause();
-      scheduleAudio.currentTime = 0;
-    }
-  }
-
-  function closeSpecBox() {
-    specBox.style.display = "none";
-    if (specAudio) {
-      specAudio.pause();
-      specAudio.currentTime = 0;
-    }
-  }
-
-  // Event listener untuk marker detection
+  // Marker Detection Events
   marker.addEventListener("markerFound", () => {
-    console.log("Marker found!");
+    console.log("Marker detected");
     if (!hasPlayedWelcome) {
-      // Inisialisasi audio context
-      initializeAudioContext();
-      
-      // Tampilkan teks welcome
       welcomeText.setAttribute("visible", true);
       
-      // Putar audio welcome dengan fallback
-      playAudioWithFallback(welcomeAudio, "Selamat datang di Lab B Institut Asia!");
+      const welcomeMessage = "Selamat datang di Lab Game Institut Asia. " +
+        "Gunakan tombol di bawah layar untuk melihat informasi spesifikasi lab, jadwal, atau menghubungi petugas UPT.";
+      playAudio(welcomeAudio, welcomeMessage);
       
       hasPlayedWelcome = true;
-      console.log("Welcome audio played and text shown");
     }
   });
 
   marker.addEventListener("markerLost", () => {
-    console.log("Marker lost!");
+    console.log("Marker lost");
     welcomeText.setAttribute("visible", false);
     
-    // Stop welcome audio jika masih playing
-    if (welcomeAudio) {
-      welcomeAudio.pause();
-      welcomeAudio.currentTime = 0;
-    }
+    // Close all info boxes when marker is lost
+    document.querySelectorAll('.info-box').forEach(box => {
+      box.style.display = 'none';
+    });
     
-    // Reset flag setelah delay untuk mencegah spam
+    stopAllAudio();
+    
+    // Reset welcome flag after a delay
     setTimeout(() => {
       hasPlayedWelcome = false;
     }, 1000);
   });
 
-  // Event listener untuk user interaction (untuk mengaktifkan audio context)
-  document.addEventListener('click', initializeAudioContext, { once: true });
-  document.addEventListener('touchstart', initializeAudioContext, { once: true });
+  // Initialize audio context on first user interaction
+  document.addEventListener('click', initAudioContext, { once: true });
+  document.addEventListener('touchstart', initAudioContext, { once: true });
 
-  // Preload audio files
+  // Preload audio files when page loads
   window.addEventListener('load', () => {
-    const audioElements = [welcomeAudio, specAudio, scheduleAudio, uptAudio];
-    audioElements.forEach(audio => {
+    // Load voices for TTS
+    if (speechSynthesis) {
+      speechSynthesis.onvoiceschanged = () => {
+        console.log("Voices loaded");
+      };
+      
+      // Some browsers need this to populate voices
+      speechSynthesis.getVoices();
+    }
+    
+    // Preload audio files
+    [welcomeAudio, specAudio, scheduleAudio, uptAudio].forEach(audio => {
       if (audio) {
-        audio.load();
+        audio.load().catch(e => console.log("Audio preload error:", e));
       }
     });
+  });
+
+  // Close box when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.info-box') && !e.target.closest('.action-button')) {
+      document.querySelectorAll('.info-box').forEach(box => {
+        box.style.display = 'none';
+      });
+      stopAllAudio();
+    }
   });
 </script>
 
