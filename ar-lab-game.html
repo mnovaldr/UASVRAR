@@ -352,7 +352,6 @@
 </a-scene>
 
 <script>
-  // DOM Elements
   const specBox = document.getElementById("specBox");
   const scheduleBox = document.getElementById("scheduleBox");
   const uptBox = document.getElementById("uptBox");
@@ -360,36 +359,27 @@
   const scheduleBtn = document.getElementById("scheduleBtn");
   const uptBtn = document.getElementById("uptBtn");
 
-  // Audio Elements
   const specAudio = document.getElementById("specAudio");
   const scheduleAudio = document.getElementById("scheduleAudio");
   const uptAudio = document.getElementById("uptAudio");
   const welcomeAudio = document.getElementById("welcomeAudio");
 
-  // AR Elements
   const welcomeText = document.getElementById("welcomeText");
   const marker = document.querySelector("a-marker");
 
-  // State Variables
   let hasPlayedWelcome = false;
-  let currentAudio = null;
   let audioContextInitialized = false;
 
-  // Initialize Audio Context
   function initAudioContext() {
     if (audioContextInitialized) return;
-    
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const context = new AudioContext();
-      
-      // Resume audio context on user interaction
       document.body.addEventListener('click', () => {
         if (context.state === 'suspended') {
           context.resume();
         }
       }, { once: true });
-      
       audioContextInitialized = true;
       return context;
     } catch (e) {
@@ -398,50 +388,33 @@
     }
   }
 
-  // Text-to-Speech Function
+  // TTS tanpa membatalkan suara lain
   function speak(text) {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'id-ID';
       utterance.rate = 0.9;
       utterance.pitch = 1;
       utterance.volume = 1;
-      
-      // Try to find Indonesian voice
-      const voices = window.speechSynthesis.getVoices();
-      const idVoice = voices.find(voice => voice.lang.includes('id')) || 
-                     voices.find(voice => voice.lang.includes('ID')) || 
-                     voices[0];
-      
-      if (idVoice) {
-        utterance.voice = idVoice;
-      }
-      
-      window.speechSynthesis.speak(utterance);
+
+      const voices = speechSynthesis.getVoices();
+      const idVoice = voices.find(v => v.lang.includes('id')) || voices[0];
+      if (idVoice) utterance.voice = idVoice;
+
+      speechSynthesis.speak(utterance);
     }
   }
 
-  // Play Audio with Fallback
+  // Memutar audio tanpa menghentikan suara lain
   function playAudio(audioElement, fallbackText) {
-    // Stop any currently playing audio
-    stopAllAudio();
-    
-    // Initialize audio context
     initAudioContext();
-    
     try {
       if (audioElement) {
         audioElement.currentTime = 0;
-        audioElement.play()
-          .then(() => {
-            currentAudio = audioElement;
-          })
-          .catch(error => {
-            console.log("Audio play failed, using TTS:", error);
-            speak(fallbackText);
-          });
+        audioElement.play().catch(error => {
+          console.log("Audio play failed, using TTS:", error);
+          speak(fallbackText);
+        });
       } else {
         speak(fallbackText);
       }
@@ -451,83 +424,43 @@
     }
   }
 
-  // Stop All Audio
-  function stopAllAudio() {
-    if (currentAudio) {
-      currentAudio.pause();
-      currentAudio.currentTime = 0;
-      currentAudio = null;
-    }
-    window.speechSynthesis.cancel();
-  }
-
-  // Show Info Box
   function showInfoBox(boxId) {
-    // Hide all boxes first
     document.querySelectorAll('.info-box').forEach(box => {
       box.style.display = 'none';
     });
-    
-    // Show the selected box
     const box = document.getElementById(boxId);
     box.style.display = 'block';
-    
-    // Scroll to top if it's the schedule box
-    if (boxId === 'scheduleBox') {
-      box.scrollTop = 0;
-    }
-    
-    // Stop any audio when showing a box
-    stopAllAudio();
+    if (boxId === 'scheduleBox') box.scrollTop = 0;
   }
 
-  // Close Info Box
   function closeInfoBox(boxId) {
     document.getElementById(boxId).style.display = 'none';
-    stopAllAudio();
   }
 
-  // Button Event Listeners
   specBtn.addEventListener("click", () => {
     showInfoBox("specBox");
-    const specText = "Spesifikasi Lab Game. " +
-      "Prosesor Intel Core i5 generasi kesepuluh dengan 6 core dan 12 thread. " +
-      "RAM 16GB DDR4. Kartu grafis NVIDIA RTX 1650 dengan memori 4GB. " +
-      "SSD 512GB dan HDD 1TB. Monitor 24 inci IPS dengan refresh rate 144Hz. " +
-      "Software utama termasuk Unity Game Engine, Unreal Engine, Blender 3D, dan Adobe Creative Suite.";
+    const specText = "Spesifikasi Lab Game. Prosesor Intel Core i5 generasi kesepuluh dengan 6 core dan 12 thread. RAM 16GB DDR4. Kartu grafis NVIDIA RTX 1650 dengan memori 4GB. SSD 512GB dan HDD 1TB. Monitor 24 inci IPS dengan refresh rate 144Hz. Software utama termasuk Unity Game Engine, Unreal Engine, Blender 3D, dan Adobe Creative Suite.";
     playAudio(specAudio, specText);
   });
 
   scheduleBtn.addEventListener("click", () => {
     showInfoBox("scheduleBox");
-    const scheduleText = "Jadwal Lab Game. " +
-      "Senin: Dasar Pemrograman Game jam 8 sampai 10, Desain Game 2D jam 10 sampai 12, " +
-      "Fisika untuk Game jam 1 sampai 3, Workshop Proyek jam 3 sampai 5. " +
-      "Selasa: Desain UI/UX untuk Game jam 8 sampai 10, Pemrograman Jaringan jam 10 sampai 12, " +
-      "Animasi 2D jam 1 sampai 3, Kecerdasan Buatan untuk Game jam 3 sampai 5. " +
-      "Rabu: Pengembangan Game Web jam 8 sampai 10, Penyuntingan Video jam 10 sampai 12, " +
-      "Desain Game Mobile jam 1 sampai 3, Desain Suara jam 3 sampai 5.";
+    const scheduleText = "Jadwal Lab Game. Senin: Dasar Pemrograman Game jam 8 sampai 10, Desain Game 2D jam 10 sampai 12, Fisika untuk Game jam 1 sampai 3, Workshop Proyek jam 3 sampai 5. Selasa: Desain UI/UX untuk Game jam 8 sampai 10, Pemrograman Jaringan jam 10 sampai 12, Animasi 2D jam 1 sampai 3, Kecerdasan Buatan untuk Game jam 3 sampai 5. Rabu: Pengembangan Game Web jam 8 sampai 10, Penyuntingan Video jam 10 sampai 12, Desain Game Mobile jam 1 sampai 3, Desain Suara jam 3 sampai 5.";
     playAudio(scheduleAudio, scheduleText);
   });
 
   uptBtn.addEventListener("click", () => {
     showInfoBox("uptBox");
-    const uptText = "Informasi Unit Pelayanan Teknis. Nomor telepon 0341-123456. " +
-      "Lokasi di Gedung Administrasi lantai 1. Jam operasional Senin sampai Jumat " +
-      "pukul 8 pagi sampai 4 sore. Silakan hubungi petugas UPT untuk bantuan teknis.";
+    const uptText = "Informasi Unit Pelayanan Teknis. Nomor telepon 0341-123456. Lokasi di Gedung Administrasi lantai 1. Jam operasional Senin sampai Jumat pukul 8 pagi sampai 4 sore. Silakan hubungi petugas UPT untuk bantuan teknis.";
     playAudio(uptAudio, uptText);
   });
 
-  // Marker Detection Events
   marker.addEventListener("markerFound", () => {
     console.log("Marker detected");
     if (!hasPlayedWelcome) {
       welcomeText.setAttribute("visible", true);
-      
-      const welcomeMessage = "Selamat datang di Lab Game Institut Asia. " +
-        "Gunakan tombol di bawah layar untuk melihat informasi spesifikasi lab, jadwal, atau menghubungi petugas UPT.";
+      const welcomeMessage = "Selamat datang di Lab Game Institut Asia. Gunakan tombol di bawah layar untuk melihat informasi spesifikasi lab, jadwal, atau menghubungi petugas UPT.";
       playAudio(welcomeAudio, welcomeMessage);
-      
       hasPlayedWelcome = true;
     }
   });
@@ -535,37 +468,25 @@
   marker.addEventListener("markerLost", () => {
     console.log("Marker lost");
     welcomeText.setAttribute("visible", false);
-    
-    // Close all info boxes when marker is lost
     document.querySelectorAll('.info-box').forEach(box => {
       box.style.display = 'none';
     });
-    
-    stopAllAudio();
-    
-    // Reset welcome flag after a delay
     setTimeout(() => {
       hasPlayedWelcome = false;
     }, 1000);
   });
 
-  // Initialize audio context on first user interaction
   document.addEventListener('click', initAudioContext, { once: true });
   document.addEventListener('touchstart', initAudioContext, { once: true });
 
-  // Preload audio files when page loads
   window.addEventListener('load', () => {
-    // Load voices for TTS
     if (speechSynthesis) {
       speechSynthesis.onvoiceschanged = () => {
         console.log("Voices loaded");
       };
-      
-      // Some browsers need this to populate voices
-      speechSynthesis.getVoices();
+      speechSynthesis.getVoices(); // preload
     }
-    
-    // Preload audio files
+
     [welcomeAudio, specAudio, scheduleAudio, uptAudio].forEach(audio => {
       if (audio) {
         audio.load().catch(e => console.log("Audio preload error:", e));
@@ -573,16 +494,16 @@
     });
   });
 
-  // Close box when clicking outside
+  // Klik luar box untuk tutup
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.info-box') && !e.target.closest('.action-button')) {
       document.querySelectorAll('.info-box').forEach(box => {
         box.style.display = 'none';
       });
-      stopAllAudio();
     }
   });
 </script>
+
 
 </body>
 </html>
